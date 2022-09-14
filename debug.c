@@ -26,14 +26,29 @@ static int simpleInstruction(const char *name,int offset){
     return offset+1;
 
 }
+int getLine(Chunk *chunk, int offset){
+    int start =0;
+    int end = chunk->lineCount-1;
+    for(;;){
+        int mid = (start+end)/2;
+        LineStart *line=&chunk->lines[mid];
+        if(offset < line->offset){
+            end = mid-1;
+        } else if(mid == chunk->lineCount-1 || offset < chunk->lines[mid+1].offset){
+            return line->line;
+    } else{
+            start=mid+1;
+        }
+    }
 
+}
 
 int disassembleInstruction(Chunk *chunk, int offset) {
     printf("%04d ", offset);
-    if(offset>0 && chunk->lines[offset]==chunk->lines[offset-1]){
+    if(offset>0 && getLine(chunk,offset)== getLine(chunk,offset-1)){
         printf("   | ");
     } else{
-        printf("%4d ",chunk->lines[offset]);
+        printf("%4d ", getLine(chunk,offset));
     }
     uint8_t instruction = chunk->code[offset];
     switch (instruction) {

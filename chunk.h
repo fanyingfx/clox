@@ -10,8 +10,13 @@
 
 typedef enum {
     OP_CONSTANT,
+    OP_CONSTANT_LONG,
     OP_RETURN,
 } OpCode;
+typedef struct{
+    int offset;
+    int line;
+} LineStart;
 typedef struct {
     /*
      * the number of elements in the array we have allocated (“capacity”)
@@ -20,8 +25,11 @@ typedef struct {
     int count;
     int capacity;
     uint8_t *code;
-    int *lines;
+    LineStart *lines;
+    int lineCount;
+    int lineCapacity;
     ValueArray constants;
+    ValueArray longConstants;
 } Chunk;
 
 void initChunk(Chunk *chunk);
