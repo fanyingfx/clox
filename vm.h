@@ -19,7 +19,7 @@ typedef struct {
 typedef enum {
     INTERPRET_OK,
     INTERPRET_COMPILE_ERROR,
-    INTERPRET_RUNTIM_ERROR
+    INTERPRET_RUNTIME_ERROR
 }InterpretResult;
 
 void initVM();
@@ -28,4 +28,7 @@ InterpretResult interpret(const char *source);
 
 void push(Value value);
 Value pop();
+static Value peek(int distance);
+static void runtimeError(const char *format, ...);
+static bool isFalsey(Value value);
 #endif //CLOX_VM_H
