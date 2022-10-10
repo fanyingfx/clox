@@ -99,7 +99,7 @@ void skipWhitespace() {
 
 // use to find the string
 Token string() {
-    while (peek() != '"' && isAtEnd()) {
+    while (peek() != '"' && !isAtEnd()) {
         if (peek() == '\n') scanner.line++;
         advance();
     }

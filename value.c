@@ -2,8 +2,11 @@
 // Created by fan on 9/13/22.
 //
 #include <stdio.h>
+#include <string.h>
 #include "memory.h"
 #include "value.h"
+#include "object.h"
+
 
 void initValueArray(ValueArray *array) {
     array->values = NULL;
@@ -39,7 +42,20 @@ void printValue(Value value) {
         case VAL_NUMBER:
             printf("%g", AS_NUMBER(value));
             break;
+        case VAL_OBJ:
+            printObject(value);
+            break;
     }
+}
+
+void printObject(Value value) {
+    switch (OBJ_TYPE(value)) {
+        case OBJ_STRING:
+            printf("%s", AS_CSTRING(value));
+            break;
+
+    }
+
 }
 
 bool valuesEqual(Value a, Value b) {
@@ -51,6 +67,13 @@ bool valuesEqual(Value a, Value b) {
             return true;
         case VAL_NUMBER:
             return AS_NUMBER(a) == AS_NUMBER(b);
+        case VAL_OBJ:{
+            ObjString *aString = AS_STRING(a);
+            ObjString *bString = AS_STRING(b);
+            return aString->length == bString->length &&
+                memcmp(aString->chars,bString->chars,aString->length)==0;
+
+        }
         default:
             return false;
 
