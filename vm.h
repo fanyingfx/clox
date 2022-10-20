@@ -6,31 +6,42 @@
 #define CLOX_VM_H
 
 #include "chunk.h"
+#include "table.h"
 #include "value.h"
+
 #define STACK_MAX 256
 typedef struct {
-    Chunk* chunk;
+    Chunk *chunk;
     uint8_t *ip;
 
     Value stack[STACK_MAX];
     Value *stackTop;
-    Obj* objects;
-}VM;
+    Table  strings;
+    Obj *objects;
+} VM;
 
 typedef enum {
     INTERPRET_OK,
     INTERPRET_COMPILE_ERROR,
     INTERPRET_RUNTIME_ERROR
-}InterpretResult;
+} InterpretResult;
 
 extern VM vm;
+
 void initVM();
+
 void freeVM();
+
 InterpretResult interpret(const char *source);
 
 void push(Value value);
+
 Value pop();
+
 static Value peek(int distance);
+
 static void runtimeError(const char *format, ...);
+
 static bool isFalsey(Value value);
+
 #endif //CLOX_VM_H

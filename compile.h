@@ -4,7 +4,10 @@
 
 #ifndef CLOX_COMPILE_H
 #define CLOX_COMPILE_H
+
 #include "vm.h"
 #include "object.h"
-bool compile(const char *source,Chunk *chunk);
+
+bool compile(const char *source, Chunk *chunk);
+
 #endif //CLOX_COMPILE_H

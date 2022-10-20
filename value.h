@@ -4,22 +4,24 @@
 
 #ifndef CLOX_VALUE_H
 #define CLOX_VALUE_H
+
 #include "common.h"
+
 typedef struct Obj Obj;
 typedef struct ObjString ObjString;
-typedef enum{
+typedef enum {
     VAL_BOOL,
     VAL_NIL,
     VAL_NUMBER,
     VAL_OBJ
-}ValueType;
+} ValueType;
 typedef struct {
     ValueType type;
     union {
         bool boolean;
         double number;
-        Obj* obj;
-    }as;
+        Obj *obj;
+    } as;
 
 } Value;
 
@@ -38,10 +40,16 @@ typedef struct {
     int capacity;
     int count;
     Value *values;
-}ValueArray;
-bool valuesEqual(Value a,Value b);
-void initValueArray(ValueArray* array);
-void writeValueArray(ValueArray* array, Value value);
-void freeValueArray(ValueArray* array);
+} ValueArray;
+
+bool valuesEqual(Value a, Value b);
+
+void initValueArray(ValueArray *array);
+
+void writeValueArray(ValueArray *array, Value value);
+
+void freeValueArray(ValueArray *array);
+
 void printValue(Value value);
+
 #endif //CLOX_VALUE_H

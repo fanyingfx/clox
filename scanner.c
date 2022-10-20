@@ -188,59 +188,61 @@ static TokenType identifierType() {
             return TOKEN_IDENTIFIER;
     }
 }
-    static Token identifier() {
-        while (isAlpha(peek()) || isDigit(peek())) advance();
-        return makeToken(identifierType());
+
+static Token identifier() {
+    while (isAlpha(peek()) || isDigit(peek())) advance();
+    return makeToken(identifierType());
+}
+
+Token scanToken() {
+    skipWhitespace();
+    scanner.start = scanner.current;
+    if (isAtEnd()) return makeToken(TOKEN_EOF);
+    char c = advance();
+    if (isAlpha(c)) return identifier();
+    if (isDigit(c)) return number();
+
+    switch (c) {
+        case '(':
+            return makeToken(TOKEN_LEFT_PAREN);
+        case ')':
+            return makeToken(TOKEN_RIGHT_PAREN);
+        case '{':
+            return makeToken(TOKEN_LEFT_BRACE);
+        case '}':
+            return makeToken(TOKEN_RIGHT_BRACE);
+        case ';':
+            return makeToken(TOKEN_SEMICOLON);
+        case ',':
+            return makeToken(TOKEN_COMMA);
+        case '.':
+            return makeToken(TOKEN_DOT);
+        case '-':
+            return makeToken(TOKEN_MINUS);
+        case '+':
+            return makeToken(TOKEN_PLUS);
+        case '/':
+            return makeToken(TOKEN_SLASH);
+        case '*':
+            return makeToken(TOKEN_STAR);
+
+            //two-character tokens
+        case '!':
+            return makeToken(
+                    match('=') ? TOKEN_BANG_EQUAL : TOKEN_BANG);
+        case '=':
+            return makeToken(
+                    match('=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
+        case '<':
+            return makeToken(
+                    match('=') ? TOKEN_LESS_EQUAL : TOKEN_LESS);
+        case '>':
+            return makeToken(
+                    match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
+        case '"':
+            return string();
+
     }
-    Token scanToken() {
-        skipWhitespace();
-        scanner.start = scanner.current;
-        if (isAtEnd()) return makeToken(TOKEN_EOF);
-        char c = advance();
-        if (isAlpha(c)) return identifier();
-        if (isDigit(c)) return number();
 
-        switch (c) {
-            case '(':
-                return makeToken(TOKEN_LEFT_PAREN);
-            case ')':
-                return makeToken(TOKEN_RIGHT_PAREN);
-            case '{':
-                return makeToken(TOKEN_LEFT_BRACE);
-            case '}':
-                return makeToken(TOKEN_RIGHT_BRACE);
-            case ';':
-                return makeToken(TOKEN_SEMICOLON);
-            case ',':
-                return makeToken(TOKEN_COMMA);
-            case '.':
-                return makeToken(TOKEN_DOT);
-            case '-':
-                return makeToken(TOKEN_MINUS);
-            case '+':
-                return makeToken(TOKEN_PLUS);
-            case '/':
-                return makeToken(TOKEN_SLASH);
-            case '*':
-                return makeToken(TOKEN_STAR);
-
-                //two-character tokens
-            case '!':
-                return makeToken(
-                        match('=') ? TOKEN_BANG_EQUAL : TOKEN_BANG);
-            case '=':
-                return makeToken(
-                        match('=') ? TOKEN_EQUAL_EQUAL : TOKEN_EQUAL);
-            case '<':
-                return makeToken(
-                        match('=') ? TOKEN_LESS_EQUAL : TOKEN_LESS);
-            case '>':
-                return makeToken(
-                        match('=') ? TOKEN_GREATER_EQUAL : TOKEN_GREATER);
-            case '"':
-                return string();
-
-        }
-
-        return errorToken("Unexpected character.");
-    }
+    return errorToken("Unexpected character.");
+}
