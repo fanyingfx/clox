@@ -83,12 +83,14 @@ void skipWhitespace() {
                 break;
             case '/':
                 if (peekNext() == '/') {
-                    while (peek() != '\n' && isAtEnd()) {
+                    while (peek() != '\n' && !isAtEnd()) {
                         advance();
                     }
-                } else {
+                }
+                else {
                     return;
                 }
+                break;
             default:
                 return;
 
@@ -136,6 +138,7 @@ static TokenType checkKeyword(int start, int length, const char *rest, TokenType
             ) {
         return type;
     }
+    return TOKEN_IDENTIFIER;
 }
 
 static TokenType identifierType() {
@@ -185,8 +188,8 @@ static TokenType identifierType() {
             return checkKeyword(1, 2, "ar", TOKEN_VAR);
         case 'w':
             return checkKeyword(1, 4, "hile", TOKEN_WHILE);
-            return TOKEN_IDENTIFIER;
     }
+    return TOKEN_IDENTIFIER;
 }
 
 static Token identifier() {
